@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Context, TemplateContext } from './TemplateContext';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Template } from '../components/Template';
 
 export interface Props {
@@ -14,17 +14,30 @@ export const withSlots =
   ({ children }: Props) => {
     const [data, setData] = useState<Context[]>([]);
 
+    const components = Array.isArray(children) ? children : [children];
+
+    const templates = useMemo(
+      () =>
+        components.filter(
+          (template) =>
+            template?.type?.name === Template.name &&
+            template?.props?.slot !== 'default',
+        ),
+      [components],
+    );
+
+    const defaultTemplate = useMemo(
+      () =>
+        components.filter(
+          (template) =>
+            template?.type?.name !== Template.name ||
+            (template?.type?.name === Template.name &&
+              template?.props?.slot === 'default'),
+        ),
+      [components],
+    );
+
     useEffect(() => {
-      const components = Array.isArray(children) ? children : [children];
-
-      const templates = components.filter(
-        (template) => template?.type?.name === Template.name,
-      );
-
-      const defaultTemplate = components.filter(
-        (template) => template?.type?.name !== Template.name,
-      );
-
       setData([
         {
           name: 'default',
@@ -39,7 +52,20 @@ export const withSlots =
       return () => {
         setData([]);
       };
-    }, [children]);
+    }, [templates, defaultTemplate]);
+
+    useEffect(() => {
+      if (data && data.length) {
+        data.forEach(({ name }) => {
+          if (
+            name !== 'default' &&
+            !templates.find((template) => template?.props?.slot === name)
+          ) {
+            console.warn(`slot with name '${name}' does not exist.`);
+          }
+        });
+      }
+    }, [data, templates]);
 
     return (
       <TemplateContext.Provider value={data}>

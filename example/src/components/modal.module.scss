@@ -1,0 +1,31 @@
+.modal {
+  max-width: 796px;
+  margin: 20px auto;
+  background-color: #ECEFF1;
+  color: #263238;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+
+  & > * {
+    padding: 20px;
+  }
+
+  & header {
+    font-size: 22px;
+  }
+
+  & section {
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    border-top: 1px white solid;
+    border-bottom: 1px white solid;
+  }
+
+  & footer {
+    text-align: right;
+    font-size: 12px;
+  }
+}

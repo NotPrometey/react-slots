@@ -1,30 +1,49 @@
-# slots
+# React slots
 
-> component slot for react app
+slots for react app. You can find a demo [here](https://notprometey.github.io/react-slots/)
 
-[![NPM](https://img.shields.io/npm/v/slots.svg)](https://www.npmjs.com/package/slots) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/@notprometey/react-slots.svg)](https://www.npmjs.com/package/@notprometey/react-slots) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Install
 
 ```bash
-npm install --save slots
+npm install --save @notprometey/react-slots
 ```
 
 ## Usage
 
 ```tsx
-import React, { Component } from 'react'
+import React from 'react'
+import { Slot, withSlots } from '@notprometey/react-slots';
 
-import MyComponent from 'slots'
-import 'slots/dist/index.css'
+const Modal = () => {
+  return (
+    <div>
+      <Slot>default content of default slot</Slot>
+      <Slot name='test'>default content of test slot</Slot>
+    </div>
+  );
+};
 
-class Example extends Component {
-  render() {
-    return <MyComponent />
-  }
-}
+export default withSlots(Modal);
+```
+
+```tsx
+import React from 'react'
+import { Template } from '@notprometey/react-slots';
+
+import Modal from './components/Modal';
+
+const App = () => {
+  return (
+    <Modal>
+      <span>content to default slot</span>
+      <Template slot='test'>content to test slot</Template>
+    </Modal>
+  );
+};
 ```
 
 ## License
 
-MIT © [notpromeney](https://github.com/notpromeney)
+MIT © [notprometey](https://github.com/notprometey)
